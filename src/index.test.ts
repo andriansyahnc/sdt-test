@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from './index';
+import { app } from './server';
 
 describe('API Endpoints', () => {
   it('GET / should return service message', async () => {

@@ -8,7 +8,10 @@
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "migrate": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "migration:create": "npx sequelize-cli migration:generate --name"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +34,7 @@
     "@types/node-cron": "^3.0.11",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
+    "sequelize-cli": "^6.6.2",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "tsx": "^4.7.0",

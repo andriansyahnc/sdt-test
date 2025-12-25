@@ -26,7 +26,7 @@ export class UserService {
       if (nextBirthday < now.setZone(dto.timezone)) {
         nextBirthday = nextBirthday.plus({ years: 1 });
       }
-      nextBirthday = nextBirthday.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+      nextBirthday = nextBirthday.set({ hour: 9, minute: 0, second: 0, millisecond: 0 });
       const wishDate = nextBirthday.toUTC().toJSDate();
 
       const existingLog = await wishLogRepo.findOne({

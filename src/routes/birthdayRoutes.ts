@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { AppDataSource } from '../config/typeorm-data-source.js';
 import { WishSentLog, WishType, WishStatus } from '../entities/WishSentLog.js';
 import { DateTime } from 'luxon';
-import { shouldSendWish } from '../scheduler/birthdayWishCron.js';
+import { shouldSendWish } from '../scheduler/wishCron.js';
 
 export const birthdayRouter = Router();
 

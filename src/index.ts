@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { app } from './server.js';
 import { AppDataSource } from './config/typeorm-data-source.js';
 import './entities/User.js';
-import { startBirthdayWishScheduler } from './scheduler/birthdayWishJob.js';
+import { startWishScheduler } from './scheduler/wishJob.js';
 import { config } from './config/appConfig.js';
 
 const startServer = async () => {

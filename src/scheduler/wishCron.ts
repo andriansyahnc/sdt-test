@@ -4,9 +4,9 @@ import { Repository } from 'typeorm';
 import { DateTime } from 'luxon';
 import axios from 'axios';
 import pLimit from 'p-limit';
+import { config } from '../config/appConfig.js';
 
 export function shouldSendWish({ sendDate, user }: { sendDate: Date, user: { timezone: string } }, testTimeUtc?: DateTime): { canSend: boolean, now: DateTime, wishDate: DateTime } {
-  // testTimeUtc: if provided, use this as the current time in UTC, otherwise use DateTime.now()
   const nowUtc = testTimeUtc || DateTime.now().toUTC();
   const nowInUserTz = nowUtc.setZone(user.timezone);
   const wishDate = DateTime.fromJSDate(sendDate).setZone(user.timezone);
@@ -19,12 +19,17 @@ async function sendWish(wish: WishSentLog, wishLogRepo: Repository<WishSentLog>)
   wish.status = WishStatus.SENT;
   await wishLogRepo.save(wish);
   try {
-    const response = await axios.post('https://your-birthday-wish-endpoint.com/send', {
-      userId: user.id,
-      firstName: user.first_name,
-      lastName: user.last_name,
-      dateOfBirth: user.date_of_birth,
-      timezone: user.timezone,
+    let message;
+    switch (wish.type) {
+      case WishType.BIRTHDAY:
+        message = `Hey, ${user.first_name} ${user.last_name} it's your birthday`;
+        break;
+      default:
+        message = `Hello, ${user.first_name} ${user.last_name}`;
+    }
+    const response = await axios.post(config.wish.endpoint, {
+      email: user.email,
+      message
     });
     if (response.status >= 200 && response.status < 300) {
       console.log(`Sent birthday wish to ${user.first_name} ${user.last_name}`);
@@ -55,12 +60,11 @@ async function scheduleRetry(wish: WishSentLog, wishLogRepo: Repository<WishSent
   }
 }
 
-export async function sendBirthdayWishesCron() {
+export async function sendWIshesCron() {
   const wishLogRepo = AppDataSource.getRepository(WishSentLog);
   const now = DateTime.now();
   const pendingWishes = await wishLogRepo.createQueryBuilder('wish')
     .leftJoinAndSelect('wish.user', 'user')
-    .where('wish.type = :type', { type: WishType.BIRTHDAY })
     .andWhere('wish.status = :status', { status: WishStatus.PENDING })
     .andWhere('wish.sendDate <= :now', { now: now.toJSDate() })
     .orderBy('wish.sendDate', 'ASC')

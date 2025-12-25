@@ -1,5 +1,6 @@
 import { AppDataSource } from '../config/typeorm-data-source.js';
 import { WishSentLog, WishType, WishStatus } from '../entities/WishSentLog.js';
+import { Repository } from 'typeorm';
 import { DateTime } from 'luxon';
 import axios from 'axios';
 import pLimit from 'p-limit';
@@ -13,7 +14,7 @@ export function shouldSendWish({ sendDate, user }: { sendDate: Date, user: { tim
   return { canSend, now: nowInUserTz, wishDate };
 }
 
-async function sendWish(wish: WishSentLog, wishLogRepo: any) {
+async function sendWish(wish: WishSentLog, wishLogRepo: Repository<WishSentLog>) {
   const user = wish.user;
   wish.status = WishStatus.SENT;
   await wishLogRepo.save(wish);
@@ -28,14 +29,15 @@ async function sendWish(wish: WishSentLog, wishLogRepo: any) {
     if (response.status >= 200 && response.status < 300) {
       console.log(`Sent birthday wish to ${user.first_name} ${user.last_name}`);
     } else {
-      await scheduleRetry(wish, wishLogRepo, `Received status ${response.status}`);
+      await scheduleRetry(wish, wishLogRepo, new Error(`Received status ${response.status}`));
     }
-  } catch (err) {
-    await scheduleRetry(wish, wishLogRepo, err);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+    await scheduleRetry(wish, wishLogRepo, new Error(errorMessage));
   }
 }
 
-async function scheduleRetry(wish: WishSentLog, wishLogRepo: any, error: any) {
+async function scheduleRetry(wish: WishSentLog, wishLogRepo: Repository<WishSentLog>, error: Error) {
   const user = wish.user;
   try {
     wish.status = WishStatus.FAILED;

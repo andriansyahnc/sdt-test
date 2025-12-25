@@ -1,7 +1,7 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength, IsDateString } from 'class-validator';
-import { IsValidTimezone } from '../validators/TimezoneValidator';
+import { IsString, IsNotEmpty, MinLength, MaxLength, IsDateString, IsEmail } from 'class-validator';
+import { IsValidTimezone } from '../validators/TimezoneValidator.js';
 
-export class CreateUserDto {
+export class CreateUserDto { 
   @IsString()
   @IsNotEmpty()
   @MinLength(1)
@@ -13,6 +13,11 @@ export class CreateUserDto {
   @MinLength(1)
   @MaxLength(100)
   lastName!: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  @MaxLength(255)
+  email!: string;
 
   @IsDateString()
   @IsNotEmpty()
@@ -34,6 +39,7 @@ export interface UserResponseDto {
   id: number;
   firstName: string;
   lastName: string;
+  email: string;
   dateOfBirth: string;
   location: string;
   timezone: string;

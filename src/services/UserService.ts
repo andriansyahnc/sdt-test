@@ -14,6 +14,7 @@ export class UserService {
       const user = userRepo.create({
         first_name: dto.firstName,
         last_name: dto.lastName,
+        email: dto.email,
         date_of_birth: dto.dateOfBirth,
         location: dto.location,
         timezone: dto.timezone,

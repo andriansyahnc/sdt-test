@@ -14,6 +14,7 @@ export const createUserRouter = (userService: UserService): Router => {
         id: user.id,
         firstName: user.first_name,
         lastName: user.last_name,
+        email: user.email,
         dateOfBirth: user.date_of_birth instanceof Date ? user.date_of_birth.toISOString().slice(0, 10) : String(user.date_of_birth),
         location: user.location,
         timezone: user.timezone,

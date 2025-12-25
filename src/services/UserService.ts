@@ -3,7 +3,7 @@ import { AppDataSource } from '../config/typeorm-data-source.js';
 import { User } from '../entities/User.js';
 import { WishSentLog, WishType, WishStatus } from '../entities/WishSentLog.js';
 import { CreateUserDto } from '../dto/UserDto.js';
-import { DateTime } from 'luxon';
+import { getNextBirthday } from '../utils/dateUtils.js';
 
 export class UserService {
   async createUser(dto: CreateUserDto): Promise<User> {
@@ -20,13 +20,7 @@ export class UserService {
       });
       await userRepo.save(user);
 
-      const now = DateTime.utc();
-      const birthDate = DateTime.fromISO(dto.dateOfBirth, { zone: dto.timezone });
-      let nextBirthday = birthDate.set({ year: now.year });
-      if (nextBirthday < now.setZone(dto.timezone)) {
-        nextBirthday = nextBirthday.plus({ years: 1 });
-      }
-      nextBirthday = nextBirthday.set({ hour: 9, minute: 0, second: 0, millisecond: 0 });
+      const nextBirthday = getNextBirthday(dto.dateOfBirth, dto.timezone, 9);
       const wishDate = nextBirthday.toUTC().toJSDate();
 
       const existingLog = await wishLogRepo.findOne({

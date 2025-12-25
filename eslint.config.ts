@@ -3,17 +3,15 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
 
-export default [
+const config = [
   {
     ...js.configs.recommended,
     languageOptions: {
-      ...js.configs.recommended.languageOptions,
       globals: {
-        ...js.configs.recommended.languageOptions?.globals,
-          process: 'readonly',
-          require: 'readonly',
-          module: 'readonly',
-          console: 'readonly',
+        process: 'readonly',
+        require: 'readonly',
+        module: 'readonly',
+        console: 'readonly',
       },
     },
   },
@@ -40,13 +38,14 @@ export default [
       '@typescript-eslint': tseslint,
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      ...tseslint.configs.recommended.rules,
     },
   },
-  prettier,
   {
-    ignores: ['node_modules', 'dist'],
+    rules: {
+      ...prettier.rules,
+    },
   },
 ];
+
+export default config;

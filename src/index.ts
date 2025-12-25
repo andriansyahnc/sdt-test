@@ -1,13 +1,13 @@
 import 'dotenv/config';
-import { app } from './server';
-import sequelize from './config/database';
-import './models/User';
+import { app } from './server.js';
+import { AppDataSource } from './config/typeorm-data-source.js';
+import './entities/User.js';
 
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    await sequelize.authenticate();
+    await AppDataSource.initialize();
     console.log('Database connected successfully');
 
     app.listen(PORT, () => {

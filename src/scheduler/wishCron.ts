@@ -36,11 +36,11 @@ async function sendWish(wish: WishSentLog, wishLogRepo: Repository<WishSentLog>)
       message,
     });
     if (response.status < 200 || response.status >= 300) {
-      await scheduleRetry(wish, wishLogRepo, new Error(`Received status ${response.status}`));
+      await scheduleRetry(wish, wishLogRepo, new Error(`Received status ${response.status}`), { hours: config.wish.retryHours });
     }
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-    await scheduleRetry(wish, wishLogRepo, new Error(errorMessage));
+    await scheduleRetry(wish, wishLogRepo, new Error(errorMessage), { hours: config.wish.retryHours });
   }
 }
 
@@ -81,13 +81,7 @@ async function scheduleRetry(
       nextSendDate = DateTime.fromJSDate(wish.sendDate).plus(delay).toUTC().toJSDate();
     }
 
-    const retryWish = wishLogRepo.create({
-      user: wish.user,
-      type: wish.type,
-      status: WishStatus.PENDING,
-      sendDate: nextSendDate,
-    });
-    await wishLogRepo.save(retryWish);
+    await createPendingWish(wish, wishLogRepo, delay, nextSendDate);
 
     console.error(
       `Failed to send birthday wish to ${wish.user.first_name} ${wish.user.last_name}:`,

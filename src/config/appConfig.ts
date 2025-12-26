@@ -15,6 +15,7 @@ export const config = {
     sendHourStart: parseInt(process.env.WISH_SEND_HOUR_START || '9'),
     sendHourEnd: parseInt(process.env.WISH_SEND_HOUR_END || '17'),
     endpoint: process.env.WISH_SEND_ENDPOINT || 'https://your-birthday-wish-endpoint.com/send',
+    retryHours: parseInt(process.env.WISH_RETRY_HOURS || '1'),
   },
   app: {
     port: parseInt(process.env.PORT || '3000'),

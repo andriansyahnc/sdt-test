@@ -64,3 +64,10 @@ pnpm run test:watch
                 - set status as failed
             - else 
                 - schedule next wish for next year
+
+## Notable decision.
+- no create pending wish done in the creation
+- after cronjob, no pending wish creation
+- the wish creation should be pick within the missing wish job (separation of concern)
+- the retry for the invalid window, will scheduled for next 9 am
+- the retry for the not working endpoint, will scheduled for next 1 hours (can be updated based on env)

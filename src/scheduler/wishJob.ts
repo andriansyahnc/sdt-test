@@ -3,7 +3,7 @@ import { sendWishesCron } from './wishCron.js';
 
 export function startWishScheduler() {
   // Run the cronjob every hour at minute 0
-  cron.schedule('0 * * * *', async () => {
+  cron.schedule('* * * * *', async () => {
     console.log('Running wish cronjob...');
     await sendWishesCron();
   });

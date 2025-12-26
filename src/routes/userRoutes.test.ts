@@ -39,10 +39,7 @@ describe('Create User', () => {
       created_at: new Date(),
       updated_at: new Date(),
     });
-    const res = await request(app)
-      .post('/users')
-      .send(validUser)
-      .expect(201);
+    const res = await request(app).post('/users').send(validUser).expect(201);
     expect(res.body).toMatchObject({
       firstName: validUser.firstName,
       lastName: validUser.lastName,
@@ -62,6 +59,7 @@ describe('Create User', () => {
     expect(res.body).toHaveProperty('error', 'Validation failed');
     expect(res.body).toHaveProperty('details');
     expect(Array.isArray(res.body.details)).toBe(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const emailError = res.body.details.find((d: any) => d.field === 'email');
     expect(emailError).toBeDefined();
     expect(emailError.errors).toContain('email must be an email');
@@ -70,10 +68,7 @@ describe('Create User', () => {
 
   it('should return 500 if userService.createUser throws', async () => {
     mockUserService.createUser.mockRejectedValue(new Error('DB error'));
-    const res = await request(app)
-      .post('/users')
-      .send(validUser)
-      .expect(500);
+    const res = await request(app).post('/users').send(validUser).expect(500);
     expect(res.body).toHaveProperty('error', 'Failed to create user');
     expect(res.body).toHaveProperty('message');
     expect(res.body.message).toMatch(/DB error/);
@@ -84,38 +79,30 @@ describe('Delete User', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-  
+
   it('should delete a user successfully', async () => {
     mockUserService.deleteUser.mockResolvedValue({ id: 1 });
-    const res = await request(app)
-      .delete('/users/1')
-      .expect(200);
+    const res = await request(app).delete('/users/1').expect(200);
     expect(res.body).toHaveProperty('message', 'User with id 1 deleted successfully');
     expect(mockUserService.deleteUser).toHaveBeenCalledWith(1);
   });
 
   it('should return 404 if user not found', async () => {
     mockUserService.deleteUser.mockResolvedValue(null);
-    const res = await request(app)
-      .delete('/users/123')
-      .expect(404);
+    const res = await request(app).delete('/users/123').expect(404);
     expect(res.body).toHaveProperty('error', 'User with id 123 not found');
     expect(mockUserService.deleteUser).toHaveBeenCalledWith(123);
   });
 
   it('should return 400 if id is 0', async () => {
-    const res = await request(app)
-      .delete('/users/0')
-      .expect(400);
+    const res = await request(app).delete('/users/0').expect(400);
     expect(res.body).toHaveProperty('error', 'Cannot delete user with id 0');
     expect(mockUserService.deleteUser).not.toHaveBeenCalled();
   });
 
   it('should return 500 if deleteUser throws', async () => {
     mockUserService.deleteUser.mockRejectedValue(new Error('DB error'));
-    const res = await request(app)
-      .delete('/users/2')
-      .expect(500);
+    const res = await request(app).delete('/users/2').expect(500);
     expect(res.body).toHaveProperty('error', 'Failed to delete user');
     expect(res.body).toHaveProperty('message');
     expect(res.body.message).toMatch(/DB error/);

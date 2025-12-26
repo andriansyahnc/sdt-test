@@ -16,7 +16,6 @@ app.get('/health', (_: Request, res: Response) => {
   res.json({ status: 'ok' });
 });
 
-
 app.use('/birthday', birthdayRouter);
 app.use('/users', createUserRouter(userService));
 

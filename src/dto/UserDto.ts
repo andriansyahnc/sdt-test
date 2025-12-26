@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, MinLength, MaxLength, IsDateString, IsEmail } from 'class-validator';
 import { IsValidTimezone } from '../validators/TimezoneValidator.js';
 
-export class CreateUserDto { 
+export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(1)

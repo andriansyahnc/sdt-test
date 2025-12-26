@@ -1,4 +1,3 @@
-
 import { DateTime } from 'luxon';
 
 /**
@@ -15,4 +14,17 @@ export function getNextBirthday(dateOfBirth: string, timezone: string, hour: num
     nextBirthday = nextBirthday.plus({ years: 1 });
   }
   return nextBirthday;
+}
+
+/**
+ * Returns the next DateTime at 9 AM in the specified timezone.
+ * @param timezone IANA timezone string
+ */
+export function getNext9am(timezone: string) {
+  const now = DateTime.now().setZone(timezone);
+  let next9am = now.set({ hour: 9, minute: 0, second: 0, millisecond: 0 });
+  if (now >= next9am) {
+    next9am = next9am.plus({ days: 1 });
+  }
+  return next9am;
 }

@@ -16,7 +16,10 @@ export const createUserRouter = (userService: UserService): Router => {
         firstName: user.first_name,
         lastName: user.last_name,
         email: user.email,
-        dateOfBirth: user.date_of_birth instanceof Date ? user.date_of_birth.toISOString().slice(0, 10) : String(user.date_of_birth),
+        dateOfBirth:
+          user.date_of_birth instanceof Date
+            ? user.date_of_birth.toISOString().slice(0, 10)
+            : String(user.date_of_birth),
         location: user.location,
         timezone: user.timezone,
         createdAt: user.created_at,
@@ -40,7 +43,9 @@ export const createUserRouter = (userService: UserService): Router => {
       if (!user) {
         return res.status(404).json({ error: `User with id ${req.params.id} not found` });
       }
-      return res.status(200).json({ message: `User with id ${req.params.id} deleted successfully` });
+      return res
+        .status(200)
+        .json({ message: `User with id ${req.params.id} deleted successfully` });
     } catch (error: unknown) {
       const message = extractErrorMessage(error);
       return res.status(500).json({ error: 'Failed to delete user', message });

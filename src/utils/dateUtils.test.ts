@@ -15,7 +15,7 @@ describe('getNextBirthday', () => {
     const today = frozenNow.toISODate()!;
     const nextBirthday = getNextBirthday(today, timezone, 9);
     expect(nextBirthday.setZone(timezone).toFormat('yyyy-MM-dd HH:mm')).toBe(
-      frozenNow.set({ hour: 9, minute: 0 }).toFormat('yyyy-MM-dd HH:mm')
+      frozenNow.set({ hour: 9, minute: 0 }).toFormat('yyyy-MM-dd HH:mm'),
     );
   });
 

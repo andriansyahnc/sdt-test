@@ -1,4 +1,3 @@
-
 import 'dotenv/config';
 import { app } from './server.js';
 import { AppDataSource } from './config/typeorm-data-source.js';

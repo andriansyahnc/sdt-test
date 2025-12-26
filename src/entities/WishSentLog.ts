@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { User } from './User.js';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export enum WishStatus {
   SENT = 'sent',
@@ -17,8 +23,9 @@ export class WishSentLog {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => User, user => user.wishSentLogs, { onDelete: 'CASCADE' })
-  user!: User;
+  @ManyToOne('User', 'wishSentLogs', { onDelete: 'CASCADE' })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  user!: any;
 
   @Column({ type: 'enum', enum: WishType })
   type!: WishType;

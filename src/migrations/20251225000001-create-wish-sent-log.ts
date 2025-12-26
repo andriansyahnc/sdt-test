@@ -15,13 +15,18 @@ export class CreateWishSentLog20251225000001 implements MigrationInterface {
             unsigned: true,
           },
           { name: 'userId', type: 'int', isNullable: false, unsigned: true },
-          { name: 'type', type: "enum", enum: ['birthday'], isNullable: false },
+          { name: 'type', type: 'enum', enum: ['birthday'], isNullable: false },
           { name: 'sendDate', type: 'datetime', isNullable: false },
-          { name: 'status', type: "enum", enum: ['sent', 'failed', 'pending', 'in_progress'], isNullable: false },
+          {
+            name: 'status',
+            type: 'enum',
+            enum: ['sent', 'failed', 'pending', 'in_progress'],
+            isNullable: false,
+          },
           { name: 'createdAt', type: 'datetime', default: 'CURRENT_TIMESTAMP', isNullable: false },
           { name: 'updatedAt', type: 'datetime', default: 'CURRENT_TIMESTAMP', isNullable: false },
         ],
-      })
+      }),
     );
     await queryRunner.createForeignKey(
       'wish_sent_logs',
@@ -30,7 +35,7 @@ export class CreateWishSentLog20251225000001 implements MigrationInterface {
         referencedTableName: 'users',
         referencedColumnNames: ['id'],
         onDelete: 'CASCADE',
-      })
+      }),
     );
   }
 

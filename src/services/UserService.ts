@@ -1,4 +1,3 @@
-
 import { AppDataSource } from '../config/typeorm-data-source.js';
 import { User } from '../entities/User.js';
 import { WishSentLog, WishType, WishStatus } from '../entities/WishSentLog.js';

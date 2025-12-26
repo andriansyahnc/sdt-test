@@ -1,4 +1,3 @@
-
 import 'dotenv/config';
 import { config } from './appConfig.js';
 import { DataSource } from 'typeorm';
@@ -20,4 +19,5 @@ export const AppDataSource = new DataSource({
   migrations: [path.join(dirname, '../migrations/*.ts')],
   synchronize: false,
   logging: false,
+  timezone: 'Z',
 });

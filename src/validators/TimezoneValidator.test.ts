@@ -11,13 +11,7 @@ const validTimezones = [
 ];
 
 // Invalid timezones
-const invalidTimezones = [
-  '',
-  'Not/AZone',
-  'GMT+7',
-  'America/NotARealCity',
-  '12345',
-];
+const invalidTimezones = ['', 'Not/AZone', 'GMT+7', 'America/NotARealCity', '12345'];
 
 describe('IsValidTimezoneConstraint', () => {
   const validator = new IsValidTimezoneConstraint();

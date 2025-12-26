@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { WishSentLog } from './WishSentLog.js';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -18,7 +24,6 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   location!: string;
 
-
   @Column({ type: 'varchar', length: 255, unique: true })
   email!: string;
 
@@ -31,6 +36,7 @@ export class User {
   @UpdateDateColumn({ type: 'datetime' })
   updated_at!: Date;
 
-  @OneToMany(() => WishSentLog, wishSentLog => wishSentLog.user)
-  wishSentLogs!: WishSentLog[];
+  @OneToMany('WishSentLog', 'user')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  wishSentLogs!: any[];
 }

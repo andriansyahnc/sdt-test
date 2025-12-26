@@ -46,4 +46,14 @@ export class UserService {
       return user;
     });
   }
+
+  async deleteUser(userId: number): Promise<User | null> {
+    const userRepo = AppDataSource.getRepository(User);
+    const user = await userRepo.findOneBy({ id: userId });
+    if (!user) {
+      return null;
+    }
+    await userRepo.remove(user);
+    return user;
+  }
 }

@@ -6,6 +6,7 @@ import request from 'supertest';
 
 const mockUserService = {
   createUser: vi.fn(),
+  deleteUser: vi.fn(),
 };
 
 const app = express();
@@ -21,9 +22,9 @@ const validUser = {
   timezone: 'UTC',
 };
 
-describe('POST /users (unit, mocked db)', () => {
+describe('Create User', () => {
   beforeEach(() => {
-    mockUserService.createUser.mockReset();
+    vi.clearAllMocks();
   });
 
   it('should create a user with valid data', async () => {
@@ -66,9 +67,8 @@ describe('POST /users (unit, mocked db)', () => {
     expect(emailError.errors).toContain('email must be an email');
     expect(mockUserService.createUser).not.toHaveBeenCalled();
   });
-});
 
-it('should return 500 if userService.createUser throws', async () => {
+  it('should return 500 if userService.createUser throws', async () => {
     mockUserService.createUser.mockRejectedValue(new Error('DB error'));
     const res = await request(app)
       .post('/users')
@@ -78,3 +78,47 @@ it('should return 500 if userService.createUser throws', async () => {
     expect(res.body).toHaveProperty('message');
     expect(res.body.message).toMatch(/DB error/);
   });
+});
+
+describe('Delete User', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+  
+  it('should delete a user successfully', async () => {
+    mockUserService.deleteUser.mockResolvedValue({ id: 1 });
+    const res = await request(app)
+      .delete('/users/1')
+      .expect(200);
+    expect(res.body).toHaveProperty('message', 'User with id 1 deleted successfully');
+    expect(mockUserService.deleteUser).toHaveBeenCalledWith(1);
+  });
+
+  it('should return 404 if user not found', async () => {
+    mockUserService.deleteUser.mockResolvedValue(null);
+    const res = await request(app)
+      .delete('/users/123')
+      .expect(404);
+    expect(res.body).toHaveProperty('error', 'User with id 123 not found');
+    expect(mockUserService.deleteUser).toHaveBeenCalledWith(123);
+  });
+
+  it('should return 400 if id is 0', async () => {
+    const res = await request(app)
+      .delete('/users/0')
+      .expect(400);
+    expect(res.body).toHaveProperty('error', 'Cannot delete user with id 0');
+    expect(mockUserService.deleteUser).not.toHaveBeenCalled();
+  });
+
+  it('should return 500 if deleteUser throws', async () => {
+    mockUserService.deleteUser.mockRejectedValue(new Error('DB error'));
+    const res = await request(app)
+      .delete('/users/2')
+      .expect(500);
+    expect(res.body).toHaveProperty('error', 'Failed to delete user');
+    expect(res.body).toHaveProperty('message');
+    expect(res.body.message).toMatch(/DB error/);
+    expect(mockUserService.deleteUser).toHaveBeenCalledWith(2);
+  });
+});

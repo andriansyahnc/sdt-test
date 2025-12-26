@@ -52,5 +52,21 @@ npm run test:watch
 
 ## Features
 
-- Create and manage users
+- Create and Delete users
 - Send scheduled wishes (supported only birthday wishes)
+
+## Cronjob usecases
+- Load 100 pending wish data that less / same with today's time.
+- if not exists
+    - exit
+- if exists
+    - loop data
+        - if time is not good?
+            - schedule retry in the next 9 am user local time
+        - else
+            - update wish log status to sent
+            - sent the message / hit endpoint
+            -  if endpoint return error
+                - set status as failed
+            - else 
+                - schedule next wish for next year

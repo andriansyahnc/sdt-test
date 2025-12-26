@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import axios from 'axios';
 import pLimit from 'p-limit';
 import { config } from '../config/appConfig.js';
-import { getNext9am, getNextBirthday } from '../utils/dateUtils.js';
+import { getNext9am, getNextWishes } from '../utils/dateUtils.js';
 
 export function shouldSendWish(
   { sendDate, user }: { sendDate: Date; user: { timezone: string } },
@@ -36,7 +36,7 @@ async function sendWish(wish: WishSentLog, wishLogRepo: Repository<WishSentLog>)
       message,
     });
     if (response.status >= 200 && response.status < 300) {
-      const nextBirthday = getNextBirthday(wish.user.date_of_birth, wish.user.timezone, 9);
+      const nextBirthday = getNextWishes(wish.user.date_of_birth, wish.user.timezone, 9);
       await createPendingWish(wish, wishLogRepo, {}, nextBirthday.toUTC().toJSDate());
     } else {
       await scheduleRetry(wish, wishLogRepo, new Error(`Received status ${response.status}`));

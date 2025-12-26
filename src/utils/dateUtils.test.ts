@@ -1,8 +1,8 @@
-import { getNextBirthday } from './dateUtils.js';
+import { getNextWishes } from './dateUtils.js';
 import { DateTime, Settings } from 'luxon';
 import { describe, it, expect, afterEach } from 'vitest';
 
-describe('getNextBirthday', () => {
+describe('getNextWishes', () => {
   const REAL_NOW = Settings.now;
   afterEach(() => {
     Settings.now = REAL_NOW;
@@ -13,7 +13,7 @@ describe('getNextBirthday', () => {
     const frozenNow = DateTime.fromISO('2025-12-25T08:00:00', { zone: timezone });
     Settings.now = () => frozenNow.toMillis();
     const today = frozenNow.toISODate()!;
-    const nextBirthday = getNextBirthday(today, timezone, 9);
+    const nextBirthday = getNextWishes(today, timezone, 9);
     expect(nextBirthday.setZone(timezone).toFormat('yyyy-MM-dd HH:mm')).toBe(
       frozenNow.set({ hour: 9, minute: 0 }).toFormat('yyyy-MM-dd HH:mm'),
     );
@@ -25,7 +25,7 @@ describe('getNextBirthday', () => {
     const frozenNow = DateTime.fromISO('2025-12-25T10:00:00', { zone: timezone });
     Settings.now = () => frozenNow.toMillis();
     const today = frozenNow.toISODate()!;
-    const nextBirthday = getNextBirthday(today, timezone, 9);
+    const nextBirthday = getNextWishes(today, timezone, 9);
     expect(nextBirthday.year).toBe(frozenNow.year + 1);
     expect(nextBirthday.month).toBe(frozenNow.month);
     expect(nextBirthday.day).toBe(frozenNow.day);
@@ -38,7 +38,7 @@ describe('getNextBirthday', () => {
     // Freeze time to 2025-12-25 00:00 in America/New_York
     const frozenNow = DateTime.fromISO('2025-12-25T00:00:00', { zone: timezone });
     Settings.now = () => frozenNow.toMillis();
-    const nextBirthday = getNextBirthday(dob, timezone, 9);
+    const nextBirthday = getNextWishes(dob, timezone, 9);
     expect(nextBirthday.year).toBe(frozenNow.year);
     expect(nextBirthday.month).toBe(12);
     expect(nextBirthday.day).toBe(31);
@@ -51,7 +51,7 @@ describe('getNextBirthday', () => {
     // Freeze time to 2025-12-25 00:00 in Europe/London
     const frozenNow = DateTime.fromISO('2025-12-25T00:00:00', { zone: timezone });
     Settings.now = () => frozenNow.toMillis();
-    const nextBirthday = getNextBirthday(dob, timezone, 9);
+    const nextBirthday = getNextWishes(dob, timezone, 9);
     expect(nextBirthday.year).toBe(frozenNow.year + 1);
     expect(nextBirthday.month).toBe(1);
     expect(nextBirthday.day).toBe(1);

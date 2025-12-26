@@ -2,7 +2,7 @@ import { AppDataSource } from '../config/typeorm-data-source.js';
 import { User } from '../entities/User.js';
 import { WishSentLog, WishType, WishStatus } from '../entities/WishSentLog.js';
 import { CreateUserDto } from '../dto/UserDto.js';
-import { getNextBirthday } from '../utils/dateUtils.js';
+import { getNextWishes } from '../utils/dateUtils.js';
 
 export class UserService {
   async createUser(dto: CreateUserDto): Promise<User> {
@@ -20,7 +20,7 @@ export class UserService {
       });
       await userRepo.save(user);
 
-      const nextBirthday = getNextBirthday(dto.dateOfBirth, dto.timezone, 9);
+      const nextBirthday = getNextWishes(dto.dateOfBirth, dto.timezone, 9);
       const wishDate = nextBirthday.toUTC().toJSDate();
 
       const existingLog = await wishLogRepo.findOne({

@@ -6,14 +6,14 @@ import { DateTime } from 'luxon';
  * @param timezone IANA timezone string
  * @param hour Hour of the day (default: 9)
  */
-export function getNextBirthday(dateOfBirth: string, timezone: string, hour: number = 9) {
+export function getNextWishes(dateOfBirth: string, timezone: string, hour: number = 9) {
   const now = DateTime.now().setZone(timezone);
-  const birthDate = DateTime.fromISO(dateOfBirth, { zone: timezone });
-  let nextBirthday = birthDate.set({ year: now.year, hour, minute: 0, second: 0, millisecond: 0 });
-  if (now > nextBirthday) {
-    nextBirthday = nextBirthday.plus({ years: 1 });
+  const wishDate = DateTime.fromISO(dateOfBirth, { zone: timezone });
+  let nextWish = wishDate.set({ year: now.year, hour, minute: 0, second: 0, millisecond: 0 });
+  if (now > nextWish) {
+    nextWish = nextWish.plus({ years: 1 });
   }
-  return nextBirthday;
+  return nextWish;
 }
 
 /**

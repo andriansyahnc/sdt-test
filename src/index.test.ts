@@ -1,5 +1,6 @@
 import request from 'supertest';
-import { app } from './server';
+import { app } from './server.js';
+import { describe, expect, it } from 'vitest';
 
 describe('API Endpoints', () => {
   it('GET / should return service message', async () => {

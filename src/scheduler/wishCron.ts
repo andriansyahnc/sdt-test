@@ -49,7 +49,7 @@ async function scheduleRetry(wish: WishSentLog, wishLogRepo: Repository<WishSent
     await wishLogRepo.save(wish);
     const retryWish = wishLogRepo.create({
       user: user,
-      type: WishType.BIRTHDAY,
+      type: wish.type,
       status: WishStatus.PENDING,
       sendDate: DateTime.fromJSDate(wish.sendDate).plus({ hours: 1 }).toJSDate(),
     });
@@ -60,7 +60,7 @@ async function scheduleRetry(wish: WishSentLog, wishLogRepo: Repository<WishSent
   }
 }
 
-export async function sendWIshesCron() {
+export async function sendWishesCron() {
   const wishLogRepo = AppDataSource.getRepository(WishSentLog);
   const now = DateTime.now();
   const pendingWishes = await wishLogRepo.createQueryBuilder('wish')

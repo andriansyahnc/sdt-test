@@ -11,7 +11,7 @@ const startServer = async () => {
     await AppDataSource.initialize();
     console.log('Database connected successfully');
 
-    startBirthdayWishScheduler();
+    startWishScheduler();
 
     app.listen(config.app.port, () => {
       console.log(`Server running on port ${config.app.port}`);

@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import axios from 'axios';
 import pLimit from 'p-limit';
 import { config } from '../config/appConfig.js';
-import { getNext9am, getNextWishes } from '../utils/dateUtils.js';
+import { getNext9am } from '../utils/dateUtils.js';
 
 export function shouldSendWish(
   { sendDate, user }: { sendDate: Date; user: { timezone: string } },
@@ -14,7 +14,7 @@ export function shouldSendWish(
   const nowUtc = testTimeUtc || DateTime.now().toUTC();
   const nowInUserTz = nowUtc.setZone(user.timezone);
   const wishDate = DateTime.fromJSDate(sendDate).setZone(user.timezone);
-  const canSend = nowInUserTz >= wishDate && nowInUserTz.hour >= 9 && nowInUserTz.hour <= 17;
+  const canSend = nowInUserTz >= wishDate && nowInUserTz.hour >= config.wish.sendHourStart && nowInUserTz.hour <= config.wish.sendHourEnd;
   return { canSend, now: nowInUserTz, wishDate };
 }
 

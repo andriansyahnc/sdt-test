@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { config } from '../config/appConfig.js';
 
 /**
  * Returns the next birthday DateTime for a given date of birth and timezone, at the specified hour (default 9 AM).
@@ -20,11 +21,11 @@ export function getNextWishes(dateOfBirth: string, timezone: string, hour: numbe
  * Returns the next DateTime at 9 AM in the specified timezone.
  * @param timezone IANA timezone string
  */
-export function getNext9am(timezone: string) {
+export function getNextAvailableHours(timezone: string) {
   const now = DateTime.now().setZone(timezone);
-  let next9am = now.set({ hour: 9, minute: 0, second: 0, millisecond: 0 });
-  if (now >= next9am) {
-    next9am = next9am.plus({ days: 1 });
+  let nextAvailableHours = now.set({ hour: config.wish.sendHourStart, minute: 0, second: 0, millisecond: 0 });
+  if (now >= nextAvailableHours) {
+    nextAvailableHours = nextAvailableHours.plus({ days: 1 });
   }
-  return next9am;
+  return nextAvailableHours;
 }

@@ -20,9 +20,6 @@ export class UserService {
       });
       await userRepo.save(user);
 
-      const nextBirthday = getNextWishes(dto.dateOfBirth, dto.timezone, 9);
-      const wishDate = nextBirthday.toUTC().toJSDate();
-
       const existingLog = await wishLogRepo.findOne({
         where: {
           user: { id: user.id },
@@ -30,18 +27,13 @@ export class UserService {
           status: WishStatus.PENDING,
         },
       });
+
       if (existingLog) {
-        existingLog.sendDate = wishDate;
+        const nextBirthday = getNextWishes(dto.dateOfBirth, dto.timezone, 9);
+        existingLog.sendDate = nextBirthday.toUTC().toJSDate();
         await wishLogRepo.save(existingLog);
-      } else {
-        const wishLog = wishLogRepo.create({
-          user,
-          type: WishType.BIRTHDAY,
-          status: WishStatus.PENDING,
-          sendDate: wishDate,
-        });
-        await wishLogRepo.save(wishLog);
       }
+      
       return user;
     });
   }

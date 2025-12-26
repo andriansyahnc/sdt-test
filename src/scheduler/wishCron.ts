@@ -35,10 +35,7 @@ async function sendWish(wish: WishSentLog, wishLogRepo: Repository<WishSentLog>)
       email: user.email,
       message,
     });
-    if (response.status >= 200 && response.status < 300) {
-      const nextBirthday = getNextWishes(wish.user.date_of_birth, wish.user.timezone, 9);
-      await createPendingWish(wish, wishLogRepo, {}, nextBirthday.toUTC().toJSDate());
-    } else {
+    if (response.status < 200 || response.status >= 300) {
       await scheduleRetry(wish, wishLogRepo, new Error(`Received status ${response.status}`));
     }
   } catch (err: unknown) {

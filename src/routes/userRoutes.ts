@@ -33,9 +33,7 @@ export const createUserRouter = (userService: UserService): Router => {
   });
 
   router.delete('/:id', async (req: Request, res: Response) => {
-    console.log(req.params.id);
     if (req.params.id === '0') {
-      console.log('Cannot delete user with id 0');
       return res.status(400).json({ error: 'Cannot delete user with id 0' });
     }
     try {

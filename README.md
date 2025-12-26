@@ -5,12 +5,6 @@ A Node.js TypeScript service for managing users and sending personalized wishes.
 ## Installation
 
 ```bash
-npm install
-```
-
-or with pnpm:
-
-```bash
 pnpm install
 ```
 
@@ -19,7 +13,7 @@ pnpm install
 Run in development mode with hot-reload:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ## Build
@@ -27,13 +21,13 @@ npm run dev
 Compile TypeScript to JavaScript:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## Run Production
 
 ```bash
-npm start
+pnpm start
 ```
 
 ## Testing
@@ -41,13 +35,13 @@ npm start
 Run all tests:
 
 ```bash
-npm test
+pnpm test
 ```
 
 Run tests in watch mode:
 
 ```bash
-npm run test:watch
+pnpm run test:watch
 ```
 
 ## Features

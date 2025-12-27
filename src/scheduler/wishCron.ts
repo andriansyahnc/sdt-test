@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import axios from 'axios';
 import pLimit from 'p-limit';
 import { config } from '../config/appConfig.js';
-import { getNext9am } from '../utils/dateUtils.js';
+import { getNextAvailableHours } from '../utils/dateUtils.js';
 
 export function shouldSendWish(
   { sendDate, user }: { sendDate: Date; user: { timezone: string } },
@@ -117,7 +117,7 @@ export async function sendWishesCron() {
       if (canSend) {
         await sendWish(wish, wishLogRepo);
       } else {
-        const nextAttempt = getNext9am(wish.user.timezone);
+        const nextAttempt = getNextAvailableHours(wish.user.timezone);
         await scheduleRetry(
           wish,
           wishLogRepo,

@@ -19,6 +19,8 @@ export async function createMissingBirthdayWishes() {
     .where('wish.id IS NULL')
     .getMany();
 
+  console.log(users.length, 'users found without pending birthday wishes to process at ', new Date().toISOString());
+
   for (const user of users) {
     const nextBirthday = getNextWishes(
       user.date_of_birth instanceof Date

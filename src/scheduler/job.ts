@@ -3,7 +3,7 @@ import { sendWishesCron } from './wishCron.js';
 import { createMissingBirthdayWishes } from './missingWishJob.js';
 
 export function startWishScheduler() {
-  cron.schedule('*/5 * * * *', async () => {
+  cron.schedule('* * * * *', async () => {
     console.log('Running wish cronjob...');
     await sendWishesCron();
   });
@@ -11,7 +11,7 @@ export function startWishScheduler() {
 }
 
 export function startMissingWishScheduler() {
-  cron.schedule('45 * * * *', async () => {
+  cron.schedule('55 * * * *', async () => {
     console.log('Running missing birthday wish scheduler...');
     await createMissingBirthdayWishes();
   });

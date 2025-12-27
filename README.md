@@ -8,6 +8,11 @@ A Node.js TypeScript service for managing users and sending personalized wishes.
 pnpm install
 ```
 
+## Migration
+```bash
+pnpm run typeorm:migrate
+```
+
 ## Development
 
 Run in development mode with hot-reload:
@@ -71,3 +76,40 @@ pnpm run test:watch
 - the wish creation should be pick within the missing wish job (separation of concern)
 - the retry for the invalid window, will scheduled for next 9 am
 - the retry for the not working endpoint, will scheduled for next 1 hours (can be updated based on env)
+
+
+### curl
+1. Create user
+```
+curl --location 'http://localhost:3000/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "firstName": "John",
+  "lastName": "Doe",
+  "dateOfBirth": "YYYY-MM-DD",
+  "location": "Jakarta",
+  "timezone": "Asia/Jakarta",
+  "email": "4andriansyah@gmail.com"
+}'
+```
+
+2. Delete user
+```
+curl --location --request DELETE 'http://localhost:3000/users/:id' \
+--header 'Content-Type: application/json' \
+--data ''
+```
+
+3. Update user
+```
+curl --location --request PUT 'http://localhost:3000/users/:id' \
+--header 'Content-Type: application/json' \
+--data '{
+  "firstName": "John",
+  "lastName": "Doe",
+  "dateOfBirth": "YYYY-MM-DD",
+  "location": "Jakarta",
+  "timezone": "Asia/Jakarta",
+  "email": "4andriansyah@gmail.com"
+}'
+```
